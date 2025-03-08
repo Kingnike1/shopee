@@ -61,7 +61,23 @@ VALUES
     ('Console de Jogos Zeta', 2800.00, 'Console de última geração com 1TB de armazenamento.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/console-zeta'),
     ('Impressora 3D Epsilon', 4500.00, 'Impressora 3D de alta precisão.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/impressora-epsilon'),
     ('Drone Theta', 1800.00, 'Drone com câmera 4K e controle remoto.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/drone-theta'),
-    ('Monitor Gamer Iota', 1200.00, 'Monitor de 27 polegadas com taxa de atualização de 144Hz.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/monitor-iota');
+    ('Monitor Gamer Iota', 1200.00, 'Monitor de 27 polegadas com taxa de atualização de 144Hz.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/monitor-iota'),
+    ('Projetor Kappa', 2000.00, 'Projetor Full HD com 3000 lumens.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/projetor-kappa'),
+    ('Relógio Inteligente Lambda', 500.00, 'Relógio inteligente com monitor de batimentos cardíacos.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/relogio-lambda'),
+    ('Cadeira Gamer Mu', 800.00, 'Cadeira gamer com ajuste de altura e inclinação.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/cadeira-mu'),
+    ('Roteador Wi-Fi Nu', 300.00, 'Roteador dual-band com velocidade de 1200Mbps.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/roteador-nu'),
+    ('Caixa de Som Bluetooth Xi', 150.00, 'Caixa de som portátil com bateria de longa duração.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/caixa-xi'),
+    ('Webcam Ômicron', 100.00, 'Webcam de alta qualidade com resolução de 1080p.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/webcam-omicron'),
+    ('Fone de Ouvido Alpha', 150.00, 'Fone de ouvido Bluetooth com som estéreo e bateria de longa duração.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/fone-alpha'),
+    ('Teclado Mecânico Beta', 350.00, 'Teclado mecânico com switches Red e retroiluminação RGB.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/teclado-beta'),
+    ('Mouse Gamer Gamma', 200.00, 'Mouse gamer com 8000 DPI e design ergonômico.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/mouse-gamma'),
+    ('Caixa de Som Delta', 180.00, 'Caixa de som Bluetooth à prova d\'água com 20 horas de duração.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/caixa-delta'),
+    ('Carregador Portátil Epsilon', 100.00, 'Carregador portátil com 10000mAh e duas portas USB.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/carregador-epsilon'),
+    ('Câmera de Segurança Zeta', 550.00, 'Câmera de segurança Wi-Fi com visão noturna e áudio bidirecional.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/camera-zeta'),
+    ('Assinatura de Software Gamma', 400.00, 'Assinatura anual de software para edição de vídeo e imagens.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/software-gamma'),
+    ('Assistente Virtual Beta', 120.00, 'Dispositivo de assistente virtual com integração em casa inteligente.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/assistente-beta'),
+    ('Óculos de Realidade Virtual Alpha', 600.00, 'Óculos VR com imersão 360° e compatibilidade com consoles e PC.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/oculos-alpha'),
+    ('Carregador Solar Delta', 250.00, 'Carregador solar portátil para celulares e dispositivos USB.', 'https://via.placeholder.com/300x200', 'https://www.exemplo.com/carregador-solar-delta');
 
 -- -----------------------------------------------------
 -- Caso queira apagar o banco de dados, descomente a linha abaixo

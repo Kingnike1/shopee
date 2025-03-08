@@ -16,5 +16,5 @@
     desconectar($conexao);
 
     echo "<script>alert('Cadastro realizado com sucesso!')</script>";
-    echo "<script>location.href='../admin/index.gtml'</script>";
+    echo "<script>location.href='../admin/index.php?pagina=tabela'</script>";
     exit;
