@@ -1,80 +1,125 @@
-/* Reset básico */
-* {
+/* Estilos gerais */
+body {
+  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-/* BODY */
-body {
-  background-color: #f5f5f5;
+  background-color: #f4f4f9;
   color: #333;
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
 }
 
-/* HEADER */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  color: white;
-  padding: 15px 20px;
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+  z-index: 1000;
 }
 
-.logo {
-  font-size: 1.5em;
+.sidebar .logo {
+  font-size: 24px;
   font-weight: bold;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #34495e;
 }
 
-.nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 15px;
-  font-size: 1em;
-  transition: 0.3s;
-}
-
-.nav a:hover {
-  color: #ffcc00;
-}
-
-/* CONTAINER PRINCIPAL */
-.container-admin {
-  flex: 1;
+.sidebar .nav {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.sidebar .nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 5px 0;
+  transition: background-color 0.3s;
+}
+
+.sidebar .nav a:hover {
+  background-color: #34495e;
+}
+
+.sidebar .nav a i {
+  margin-right: 10px;
+}
+
+/* Botão de toggle do sidebar */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background-color: #2c3e50;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Conteúdo principal */
+.main-content {
+  margin-left: 250px;
+  flex: 1;
+  transition: margin-left 0.3s ease;
+}
+
+.container-admin {
   padding: 20px;
 }
 
 .content {
-  background: white;
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Mensagem informativa */
 .info {
-  font-size: 1.2em;
-  color: #777;
-  margin-top: 10px;
+  text-align: center;
+  color: #666;
 }
 
-/* FOOTER */
+/* Footer */
 .footer {
-  background-color: #333;
-  color: white;
   text-align: center;
-  padding: 15px;
-  position: relative;
+  padding: 10px;
+  background-color: #2c3e50;
+  color: #fff;
   width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
 }
 
 
@@ -252,3 +297,4 @@ td button:hover {
 .text-success { color: #28a745; }  /* Verde para o mais caro */
 .text-danger { color: #dc3545; }    /* Vermelho para o mais barato */
 .text-info { color: #17a2b8; }      /* Azul para a média */
+

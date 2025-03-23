@@ -19,15 +19,17 @@ function desconectar($conexao)
 }
 
 
-function listarProdutos()
-{
+function listarProdutos(){
   $conexao = conectar();
-  $sql = "SELECT * FROM `produtos`";
-  $resultado = mysqli_query($conexao, $sql);
+  $sql = "SELECT * FROM `produtos` ORDER BY RAND() limit 4";
+  $comando = mysqli_prepare($conexao, $sql);
 
-  echo "         <h1>Produtos</h1>
+  mysqli_stmt_execute($comando);
 
-    <div class='container'>";
+  $resultado = mysqli_stmt_get_result($comando);
+
+
+
   while ($row = mysqli_fetch_array($resultado)) {
     $nome = $row['nome'];
     $preco = $row['preco'];
@@ -35,68 +37,27 @@ function listarProdutos()
     $imagem = $row['imagem'];
     $link = $row['link'];
 
-    echo "
-
-            <div class='card' id='productCard'>
-                <div class='card-image'>
-                    <img src='$imagem' alt='Produto'>
+    echo " <a href = '$link' class='product-link'>
+                     <div class='product-card'>
+                    <img src='$imagem'
+                        alt='Product Image'>
+                    <div class='info'>
+                        <h3>$nome</h3>
+                        <p>$descricao</p>
+                        <div class='price'>R$ $preco</div>
+                    </div>
+                    <div class='price-badge'>New</div>
                 </div>
-                <div class='card-info'>
-                    <h2>$nome</h2>
-                    <p>$descricao</p>
-                    <p class='price'>R$ $preco</p>
-                    <a href='$link' target='_blank' rel='noopener noreferrer' class='button-link'>
-                        <button>
-                            <div class='default-btn'>
-                                <svg
-                                    viewBox='0 0 24 24'
-                                    width='20'
-                                    height='20'
-                                    stroke='#FFF'
-                                    stroke-width='2'
-                                    fill='none'
-                                    stroke-linecap='round'
-                                    stroke-linejoin='round'
-                                    class='css-i6dzq1'
-                                >
-                                    <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path>
-                                    <circle cx='12' cy='12' r='3'></circle>
-                                </svg>
-                                <span>Quick View</span>
-                            </div>
-                            <div class='hover-btn'>
-                                <svg
-                                    viewBox='0 0 24 24'
-                                    width='20'
-                                    height='20'
-                                    stroke='#ffd300'
-                                    stroke-width='2'
-                                    fill='none'
-                                    stroke-linecap='round'
-                                    stroke-linejoin='round'
-                                    class='css-i6dzq1'
-                                >
-                                    <circle cx='9' cy='21' r='1'></circle>
-                                    <circle cx='20' cy='21' r='1'></circle>
-                                    <path
-                                        d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6'
-                                    ></path>
-                                </svg>
-                                <span>Shop Now</span>
-                            </div>
-                        </button>
-                    </a>
-                </div>
-            </div>";
+            </a>";
   }
-  echo "</div>";
 
 
   desconectar($conexao);
   // return $resultado;
 }
 
-function tabelaProdutos(){
+function tabelaProdutos()
+{
   echo "<h1>Listagem de Produtos</h1>";
   echo "<table id='tabelaProdutos'>"; // Adicione um ID à tabela
   echo "<thead>";
@@ -117,7 +78,10 @@ function tabelaProdutos(){
 
   $conexao = conectar();
   $sql = "SELECT * FROM `produtos`";
-  $resultado = mysqli_query($conexao, $sql);
+  $comando = mysqli_prepare($conexao, $sql);
+
+  mysqli_stmt_execute($comando);
+  $resultado = mysqli_stmt_get_result($comando);
 
   while ($row = mysqli_fetch_assoc($resultado)) {
     $id = $row['idproduto'];
@@ -145,8 +109,6 @@ function tabelaProdutos(){
 
   echo "</tbody>";
   echo "</table>";
-
-
 }
 
 
@@ -234,63 +196,72 @@ function formularioProdutos()
 
 function estatisticaProdutos()
 {
-  $conexao = conectar();
+    $conexao = conectar();
 
-  // Consultas SQL (mantidas iguais)
-  $sqlTotal = "SELECT COUNT(*) as total FROM `produtos`";
-  $resultadoTotal = mysqli_query($conexao, $sqlTotal);
-  $totalProdutos = mysqli_fetch_assoc($resultadoTotal)['total'];
+    // Consulta para contar o total de produtos
+    $sqlTotal = "SELECT COUNT(*) as total FROM `produtos`";
+    $comando = mysqli_prepare($conexao, $sqlTotal);
+    mysqli_stmt_execute($comando);
+    $resultadoTotal = mysqli_stmt_get_result($comando);
+    $totalProdutos = $resultadoTotal->fetch_assoc()['total']; // Correção aqui
 
-  $sqlMaxPreco = "SELECT nome, preco FROM `produtos` ORDER BY preco DESC LIMIT 1";
-  $resultadoMaxPreco = mysqli_query($conexao, $sqlMaxPreco);
-  $produtoMaisCaro = mysqli_fetch_assoc($resultadoMaxPreco);
-
-  $sqlMinPreco = "SELECT nome, preco FROM `produtos` ORDER BY preco ASC LIMIT 1";
-  $resultadoMinPreco = mysqli_query($conexao, $sqlMinPreco);
-  $produtoMaisBarato = mysqli_fetch_assoc($resultadoMinPreco);
-
-  $sqlMediaPreco = "SELECT AVG(preco) as media_preco FROM `produtos`";
-  $resultadoMediaPreco = mysqli_query($conexao, $sqlMediaPreco);
-  $mediaPreco = mysqli_fetch_assoc($resultadoMediaPreco)['media_preco'];
+    // Consulta para encontrar o produto mais caro
+    $sqlMaxPreco = "SELECT nome, preco FROM `produtos` ORDER BY preco DESC LIMIT 1";
+    $stmt = mysqli_prepare($conexao, $sqlMaxPreco);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
+    $produtoMaisCaro = $resultado->fetch_assoc();
 
 
-  // Exibindo as estatísticas com classes personalizadas
-  echo "<div class='container-admin'>
-            <div class='content'>
-              <h1>Estatísticas de Produtos</h1>
-              <div class='card-estatistica'>
-                <div class='card-body'>
-                  <h2 class='card-title'>Total de Produtos</h2>
-                  <p class='card-text'>$totalProdutos</p>
+    // Consulta para encontrar o produto mais barato
+    $sqlMinPreco = "SELECT nome, preco FROM `produtos` ORDER BY preco ASC LIMIT 1";
+    $resultadoMinPreco = mysqli_query($conexao, $sqlMinPreco);
+    $produtoMaisBarato = mysqli_fetch_assoc($resultadoMinPreco);
+
+    // Consulta para calcular a média de preços
+    $sqlMediaPreco = "SELECT AVG(preco) as media_preco FROM `produtos`";
+    $resultadoMediaPreco = mysqli_query($conexao, $sqlMediaPreco);
+    $mediaPreco = mysqli_fetch_assoc($resultadoMediaPreco)['media_preco'];
+
+    // Exibindo os resultados
+    echo "<div class='container-admin'>
+              <div class='content'>
+                <h1>Estatísticas de Produtos</h1>
+                <div class='card-estatistica'>
+                  <div class='card-body'>
+                    <h2 class='card-title'>Total de Produtos</h2>
+                    <p class='card-text'>$totalProdutos</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class='card-estatistica'>
-                <div class='card-body'>
-                  <h2 class='card-title'>Produto Mais Caro</h2>
-                  <p class='card-text text-success'>{$produtoMaisCaro['nome']} - R$ " . number_format($produtoMaisCaro['preco'], 2, ',', '.') . "</p>
+                <div class='card-estatistica'>
+                  <div class='card-body'>
+                    <h2 class='card-title'>Produto Mais Caro</h2>
+                    <p class='card-text text-success'>{$produtoMaisCaro['nome']} - R$ " . number_format($produtoMaisCaro['preco'], 2, ',', '.') . "</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class='card-estatistica'>
-                <div class='card-body'>
-                  <h2 class='card-title'>Produto Mais Barato</h2>
-                  <p class='card-text text-danger'>{$produtoMaisBarato['nome']} - R$ " . number_format($produtoMaisBarato['preco'], 2, ',', '.') . "</p>
+                <div class='card-estatistica'>
+                  <div class='card-body'>
+                    <h2 class='card-title'>Produto Mais Barato</h2>
+                    <p class='card-text text-danger'>{$produtoMaisBarato['nome']} - R$ " . number_format($produtoMaisBarato['preco'], 2, ',', '.') . "</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class='card-estatistica'>
-                <div class='card-body'>
-                  <h2 class='card-title'>Média de Preços</h2>
-                  <p class='card-text text-info'>R$ " . number_format($mediaPreco, 2, ',', '.') . "</p>
+                <div class='card-estatistica'>
+                  <div class='card-body'>
+                    <h2 class='card-title'>Média de Preços</h2>
+                    <p class='card-text text-info'>R$ " . number_format($mediaPreco, 2, ',', '.') . "</p>
+                  </div>
                 </div>
-              </div>";
+          </div>
+      </div>";
 
+    desconectar($conexao);
 
-  desconectar($conexao);
-
-  return $totalProdutos;
+    return $totalProdutos;
 }
+
 
 function listarprodutosAdmin()
 {
@@ -445,4 +416,122 @@ function atualizarProduto($id, $nome, $preco, $descricao, $link, $imagem, $categ
   // Redireciona para a página da tabela de produtos
   echo "<script>window.location.href = '../admin/index.php?pagina=tabela';</script>";
   exit();
+}
+
+function excluirProduto($id)
+{
+  $conexao = conectar();
+
+  $id = $_GET['id'];
+  $sql = "DELETE FROM `produtos` WHERE idproduto = $id";
+  $resultado = mysqli_query($conexao, $sql);
+
+  if (!$resultado) {
+    die("Erro ao excluir o produto: " . mysqli_error($conexao));
+  }
+
+  desconectar($conexao);
+
+  // Redireciona para a página da tabela de produtos
+  echo "<script>window.location.href = '../admin/index.php?pagina=tabela';</script>";
+  exit();
+}
+
+
+function listarProdutos2()
+{
+  $conexao = conectar();
+  $sql = "SELECT * FROM `produtos` ORDER BY RAND() limit 3";
+  $resultado = mysqli_query($conexao, $sql);
+
+
+  while ($row = mysqli_fetch_array($resultado)) {
+    $nome = $row['nome'];
+    $preco = $row['preco'];
+    $descricao = $row['descricao'];
+    $imagem = $row['imagem'];
+    $link = $row['link'];
+
+    echo " <a href = '$link' class='product-link'>
+                     <div class='product-card'>
+                    <img src='$imagem'
+                        alt='Product Image'>
+                    <div class='info'>
+                        <h3>$nome</h3>
+                        <p>$descricao</p>
+                        <div class='price'>R$ $preco</div>
+                    </div>
+                    <div class='price-badge'>New</div>
+                </div>
+            </a>";
+  }
+
+
+  desconectar($conexao);
+  // return $resultado;
+}
+function listarCategorias(): void
+{
+  $conexao = conectar();
+  $sql = "SELECT DISTINCT `categoria` FROM `produtos`"; // Busca categorias únicas
+  $resultado = mysqli_query($conexao, $sql);
+
+  if (mysqli_num_rows($resultado) > 0) {
+    echo "<div class='category-selector'>
+              <h2>Escolha uma Categoria</h2>
+              <form method='get' action='index.php'>
+                  <select name='categoria' id='categoriaSelect'>
+                      <option value=''>Selecione uma categoria</option>";
+
+    while ($row = mysqli_fetch_array($resultado)) {
+      $categoria = $row['categoria'];
+      echo "<option value='$categoria'>$categoria</option>";
+    }
+
+    echo "</select>
+            <button type='submit' name='confirmar' class='confirm-button'>Confirmar</button>
+            </form>
+            </div>";
+  } else {
+    echo "<p>Nenhuma categoria encontrada.</p>";
+  }
+
+  desconectar($conexao);
+}
+
+function listarProdutosPorCategoria($categoria): void
+{
+  $conexao = conectar();
+  $sql = "SELECT * FROM `produtos` WHERE `categoria` = '$categoria' ORDER BY RAND() LIMIT 3"; // Seleciona 3 produtos da mesma categoria
+  $resultado = mysqli_query($conexao, $sql);
+
+  if (mysqli_num_rows($resultado) > 0) {
+    echo "<div class='featured-collections'>
+              <h2>Produtos da Categoria: $categoria</h2>
+              <div class='collections-grid'>";
+
+    while ($row = mysqli_fetch_array($resultado)) {
+      $nome = $row['nome'];
+      $descricao = $row['descricao'];
+      $imagem = $row['imagem'];
+      $link = $row['link'];
+
+      echo "<div class='collection-card'>
+                  <img src='$imagem' alt='$nome'>
+                  <div class='info'>
+                      <h3>$nome</h3>
+                      <p>$descricao</p>
+                      <a href='$link' class='cta-button'>Ver Produto</a>
+                  </div>
+                </div>";
+    }
+
+    echo "</div></div>";
+  } else if ($categoria == null) {
+    echo "";
+  }else{
+    echo "<p>Nenhum produto encontrado para a categoria: $categoria</p>";
+  }
+
+  desconectar($conexao);
 }

@@ -14,28 +14,18 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `shopee` DEFAULT CHARACTER SET utf8mb4;
 USE `shopee`;
 
-
-
 -- -----------------------------------------------------
 -- Criar a tabela `usuarios`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `idusuario` INT NOT NULL AUTO_INCREMENT,  -- Coluna de ID autoincrementável
-  `nome` VARCHAR(255) NULL DEFAULT NULL,                    -- Nome do usuário
-  `email` VARCHAR(255) NULL DEFAULT NULL,                   -- Email do usuário
-  `senha` VARCHAR(255) NULL DEFAULT NULL,                   -- Senha do usuário
-  PRIMARY KEY (`idusuario`)                                -- Definindo a chave primária
-) ENGINE = InnoDB                                           -- Usando o mecanismo de armazenamento InnoDB
-DEFAULT CHARACTER SET = utf8mb4;                            -- Definindo o conjunto de caracteres como utf8mb4
+  `nome` VARCHAR(255) NULL DEFAULT NULL,    -- Nome do usuário
+  `email` VARCHAR(255) NULL DEFAULT NULL,   -- Email do usuário
+  `senha` VARCHAR(255) NULL DEFAULT NULL,   -- Senha do usuário
+  PRIMARY KEY (`idusuario`)                 -- Definindo a chave primária
+) ENGINE = InnoDB                           -- Usando o mecanismo de armazenamento InnoDB
+DEFAULT CHARACTER SET = utf8mb4;            -- Definindo o conjunto de caracteres como utf8mb4
 
--- Restaurando as configurações de verificação de chaves únicas e estrangeiras.
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
--- -----------------------------------------------------
--- Inserir dados na tabela `produtos`
--- -----------------------------------------------------
 -- -----------------------------------------------------
 -- Criar a tabela `produtos`
 -- -----------------------------------------------------
@@ -51,7 +41,25 @@ CREATE TABLE IF NOT EXISTS `produtos` (
 ) ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
--- Inserindo alguns produtos de exemplo
+-- -----------------------------------------------------
+-- Criar a tabela `clicks`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `clicks` (
+  `idclick` INT NOT NULL AUTO_INCREMENT,    -- Coluna de ID autoincrementável
+  `idproduto` INT NOT NULL,                 -- ID do produto clicado
+  `quantidade` INT DEFAULT 0,               -- Quantidade de cliques
+  PRIMARY KEY (`idclick`),                  -- Definindo a chave primária
+  CONSTRAINT `fk_clicks_produtos`           -- Definindo a chave estrangeira
+    FOREIGN KEY (`idproduto`)
+    REFERENCES `produtos` (`idproduto`)
+    ON DELETE CASCADE                       -- Se o produto for deletado, os cliques também serão
+    ON UPDATE CASCADE                       -- Se o ID do produto for atualizado, os cliques também serão
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- -----------------------------------------------------
+-- Inserir dados na tabela `produtos`
+-- -----------------------------------------------------
 INSERT INTO `produtos` (`nome`, `descricao`, `preco`, `imagem`, `link`, `categoria`) VALUES
 ('Smartphone Alpha', 'Smartphone com câmera de alta resolução e 128GB de armazenamento.', 1999.99, 'imagens/smartphone_alpha.jpg', 'https://shopee.com.br/smartphone-alpha', 'Eletrônicos'),
 ('Notebook Pro X', 'Notebook com processador i7, 16GB RAM e SSD de 512GB.', 4999.99, 'imagens/notebook_prox.jpg', 'https://shopee.com.br/notebook-prox', 'Informática'),
@@ -60,6 +68,57 @@ INSERT INTO `produtos` (`nome`, `descricao`, `preco`, `imagem`, `link`, `categor
 ('Relógio SmartFit', 'Relógio inteligente com monitoramento de batimentos cardíacos.', 359.90, 'imagens/smartfit.jpg', 'https://shopee.com.br/smartfit', 'Acessórios'),
 ('Teclado Mecânico RGB', 'Teclado gamer mecânico com iluminação RGB personalizável.', 450.00, 'imagens/teclado_rgb.jpg', 'https://shopee.com.br/teclado-rgb', 'Periféricos');
 
+INSERT INTO `produtos` (`nome`, `descricao`, `preco`, `imagem`, `link`, `categoria`) VALUES
+-- Eletrônicos
+('Tablet Ultra', 'Tablet com tela de 10 polegadas e 256GB de armazenamento.', 2499.99, 'imagens/tablet_ultra.jpg', 'https://shopee.com.br/tablet-ultra', 'Eletrônicos'),
+('Smartwatch Pro', 'Relógio inteligente com múltiplas funções fitness.', 699.90, 'imagens/smartwatch_pro.jpg', 'https://shopee.com.br/smartwatch-pro', 'Eletrônicos'),
+('Câmera 4K Action', 'Câmera compacta resistente à água e gravação em 4K.', 799.90, 'imagens/camera_4k.jpg', 'https://shopee.com.br/camera-4k', 'Eletrônicos'),
+('Drone X500', 'Drone com câmera 1080p e controle remoto de longo alcance.', 1299.90, 'imagens/drone_x500.jpg', 'https://shopee.com.br/drone-x500', 'Eletrônicos'),
+('Console GameBox', 'Console de última geração com gráficos ultra-realistas.', 3999.99, 'imagens/console_gamebox.jpg', 'https://shopee.com.br/console-gamebox', 'Eletrônicos'),
+-- Informática
+('Monitor 27" 144Hz', 'Monitor gamer com taxa de atualização de 144Hz.', 1899.99, 'imagens/monitor_27.jpg', 'https://shopee.com.br/monitor-27', 'Informática'),
+('Mouse Gamer X', 'Mouse óptico de alta precisão com iluminação RGB.', 199.90, 'imagens/mouse_gamer.jpg', 'https://shopee.com.br/mouse-gamer-x', 'Informática'),
+('SSD NVMe 1TB', 'Unidade de armazenamento NVMe de 1TB para alta velocidade.', 699.90, 'imagens/ssd_1tb.jpg', 'https://shopee.com.br/ssd-1tb', 'Informática'),
+('Placa de Vídeo RTX 4060', 'Placa de vídeo com suporte a Ray Tracing.', 3199.90, 'imagens/rtx_4060.jpg', 'https://shopee.com.br/rtx-4060', 'Informática'),
+('Gabinete Gamer RGB', 'Gabinete com design moderno e iluminação RGB.', 549.99, 'imagens/gabinete_gamer.jpg', 'https://shopee.com.br/gabinete-gamer', 'Informática'),
+-- Áudio
+('Caixa de Som Bluetooth', 'Caixa de som potente com conexão Bluetooth.', 399.99, 'imagens/caixa_som.jpg', 'https://shopee.com.br/caixa-som', 'Áudio'),
+('Microfone Condensador', 'Microfone profissional para gravações e streaming.', 599.99, 'imagens/microfone.jpg', 'https://shopee.com.br/microfone', 'Áudio'),
+('Soundbar 5.1', 'Sistema de som surround para home theater.', 1299.99, 'imagens/soundbar.jpg', 'https://shopee.com.br/soundbar', 'Áudio'),
+('Fone Intra-auricular', 'Fone de ouvido com isolamento acústico.', 149.99, 'imagens/fone_intra.jpg', 'https://shopee.com.br/fone-intra', 'Áudio'),
+('Amplificador de Som', 'Amplificador de som profissional.', 999.99, 'imagens/amplificador.jpg', 'https://shopee.com.br/amplificador', 'Áudio'),
+-- Móveis
+('Mesa Gamer RGB', 'Mesa para setup gamer com iluminação LED.', 699.99, 'imagens/mesa_gamer.jpg', 'https://shopee.com.br/mesa-gamer', 'Móveis'),
+('Estante Moderna', 'Estante de madeira MDF com design minimalista.', 499.99, 'imagens/estante_moderna.jpg', 'https://shopee.com.br/estante-moderna', 'Móveis'),
+('Sofá Retrátil', 'Sofá confortável com assento reclinável.', 2299.99, 'imagens/sofa_retratil.jpg', 'https://shopee.com.br/sofa-retratil', 'Móveis'),
+('Cama Box Queen', 'Cama box queen com colchão ortopédico.', 1899.99, 'imagens/cama_box.jpg', 'https://shopee.com.br/cama-box', 'Móveis'),
+('Escrivaninha Compacta', 'Mesa de escritório compacta com gavetas.', 349.99, 'imagens/escrivaninha.jpg', 'https://shopee.com.br/escrivaninha', 'Móveis'),
+-- Acessórios
+('Mochila Executiva', 'Mochila resistente com compartimento para notebook.', 249.99, 'imagens/mochila.jpg', 'https://shopee.com.br/mochila', 'Acessórios'),
+('Carteira de Couro', 'Carteira de couro legítimo com vários compartimentos.', 99.99, 'imagens/carteira.jpg', 'https://shopee.com.br/carteira', 'Acessórios'),
+('Óculos de Sol Polarizado', 'Óculos de sol UV400 com lentes polarizadas.', 179.99, 'imagens/oculos_solar.jpg', 'https://shopee.com.br/oculos-solar', 'Acessórios'),
+('Pulseira Fitness', 'Pulseira inteligente com monitor de atividades.', 129.99, 'imagens/pulseira_fitness.jpg', 'https://shopee.com.br/pulseira-fitness', 'Acessórios'),
+('Boné Estiloso', 'Boné casual de alta qualidade.', 79.99, 'imagens/bone.jpg', 'https://shopee.com.br/bone', 'Acessórios'),
+-- Periféricos
+('Mousepad XXL', 'Mousepad gamer grande com superfície antiderrapante.', 79.99, 'imagens/mousepad.jpg', 'https://shopee.com.br/mousepad', 'Periféricos'),
+('Headset Gamer', 'Headset com som surround 7.1 e microfone removível.', 349.99, 'imagens/headset.jpg', 'https://shopee.com.br/headset', 'Periféricos'),
+('Webcam Full HD', 'Webcam 1080p para videoconferências.', 249.99, 'imagens/webcam.jpg', 'https://shopee.com.br/webcam', 'Periféricos'),
+('Suporte para Notebook', 'Suporte ajustável para melhor ergonomia.', 129.99, 'imagens/suporte_notebook.jpg', 'https://shopee.com.br/suporte-notebook', 'Periféricos'),
+('Controle Joystick', 'Controle para PC e consoles com conexão Bluetooth.', 199.99, 'imagens/joystick.jpg', 'https://shopee.com.br/joystick', 'Periféricos');
+
+INSERT INTO clicks (idproduto, quantidade) VALUES (2, 1)
+ON DUPLICATE KEY UPDATE quantidade = quantidade + 1;
+-- -----------------------------------------------------
+-- Restaurando as configurações de verificação de chaves únicas e estrangeiras.
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 -- -----------------------------------------------------
 -- Caso queira apagar o banco de dados, descomente a linha abaixo
 -- DROP DATABASE shopee;
+
+-- SELECT p.nome, c.quantidade
+-- FROM produtos p
+-- JOIN clicks c ON p.idproduto = c.idproduto
+-- ORDER BY c.quantidade DESC;
