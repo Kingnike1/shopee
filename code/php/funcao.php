@@ -386,8 +386,7 @@ function editarProduto($id)
   desconectar($conexao);
 }
 
-function atualizarProduto($id, $nome, $preco, $descricao, $link, $imagem, $categoria, $outraCategoria = "ada")
-{
+function atualizarProduto($id, $nome, $preco, $descricao, $link, $imagem, $categoria, $outraCategoria = "ada"){
   $conexao = conectar();
 
   // Verifica se a categoria é "Outros" e se foi fornecida uma nova categoria
